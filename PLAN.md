@@ -1,6 +1,5 @@
 # Cyber offence/defence capability gap: aligned vs. refusal-ablated models
 
-**Author:** ky295@cantab.ac.uk · **Date:** 2026-10-05 · **Status:** plan (nothing run yet)
 
 ## 1. Research question
 
@@ -17,7 +16,7 @@ across the pair, and reads the **aligned→ablated deltas** and their
 
 ## 2. Models
 
-Primary pair (agentic-capable, chosen because 8B distils are weak tool users):
+Primary pair (agentic-capable):
 
 | Role | Model | Weights | Serving |
 |---|---|---|---|
@@ -37,12 +36,6 @@ base on benign prompts and refusals cut from 100→26 on a held-out harmful set.
 - Serve both from the same vLLM version behind the same OpenAI-compatible API so
   every harness is wired identically. Asymmetric serving is the main validity threat.
 
-Optional secondary (addresses the original ortho-layer-17 curiosity, **non-agentic
-only**): the DeepSeek-R1-Distill-Llama-8B pair
-(`deepseek-ai/DeepSeek-R1-Distill-Llama-8B` vs
-`kureha295/...-ortho-cot-layer-17`, gated under the user's HF account) run on
-AuditBench, where no tool use is required. Flagged optional to avoid scaffold
-failure swamping the signal on the agentic benchmarks.
 
 ## 3. Design and predicted signatures
 
@@ -141,7 +134,7 @@ from data already collected:
    refusals vs. confident wrong answers. Ablation should *reduce* refusals, so a
    defence drop that is not refusal-driven points to wrong-answering (capability loss
    or answer-level sandbagging), which (2) then adjudicates.
-4. **Lightweight general-capability anchor (recommended add-on).** The offence axis
+4. **General-capability anchor (included, approved 2026-10-05).** The offence axis
    controls for *cyber* capability but not general degradation. A cheap non-cyber
    control (e.g. a 200-item MMLU or GSM8K slice) measures whether the weight edit hurt
    the model broadly. If general capability is intact but defence drops, pure
@@ -176,32 +169,6 @@ from data already collected:
   existing published benchmarks.
 - Log and retain trajectories for audit; report capability results in aggregate.
 
-## 9. Milestones
-
-1. **M0 — infra & smoke (week 1):** stand up vLLM for both models; verify harmony
-   template + reasoning effort parity; `--trial_run`/smoke each of the 4 harnesses on
-   the aligned model only.
-2. **M1 — defence (week 1–2):** AuditBench + ExCyTIn, both models, 3 attempts. Cheap;
-   run first to de-risk the pipeline and get an early defence delta.
-3. **M2 — offence (week 2–3):** ExploitBench (41 bugs) then CyberGym subset (~120),
-   both models, 3 attempts, under the spend guard.
-4. **M3 — analysis (week 3–4):** deltas, interaction test, trace labelling, refusal
-   breakdown, optional capability anchor; write-up in `results/` + `notes/`.
-
-## 10. Risks and limitations
-
-- **Scaffold failure vs. capability.** Weak tool use can masquerade as low capability;
-  the fixed scaffold and the aligned-model smoke in M0 bound this, and it applies
-  equally to both models in the pair.
-- **Serving asymmetry.** MXFP4 (aligned) vs. bf16 (ablated) differ in numerics; keep
-  everything else identical and note the quantisation difference as a caveat. If
-  feasible, also serve an MXFP4 build of the ablated model to check robustness.
-- **Judge contamination.** The ExCyTIn judge must be a fixed external model, identical
-  across both runs, or it confounds the defence delta.
-- **Single seed.** 1 seed limits variance estimates; pass@3 and bootstrap CIs over the
-  3 attempts partially mitigate. Add seeds if budget allows.
-- **Difficulty non-comparability.** Only within-pair deltas and the interaction are
-  interpretable across the offence/defence axes (§3).
 
 ## 11. Repository layout
 
