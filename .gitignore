@@ -1,0 +1,6 @@
+results/*
+!results/.gitkeep
+.env
+__pycache__/
+*.7z
+*.tar.gz
