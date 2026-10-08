@@ -11,6 +11,6 @@ source "$VENV/bin/activate"
 pip install -q -U pip
 # Minimal deps the upstream GPT path + metrics actually import.
 pip install -q "openai>=1.40" "python-dotenv>=1.0" "tenacity>=8.2" tqdm \
-  igraph networkx   # upstream helpers/ parse edge logs with these
+  igraph networkx numpy pandas python-dateutil   # upstream helpers + metrics
 echo "venv ready: $VENV"
 echo "activate with:  source $VENV/bin/activate"
