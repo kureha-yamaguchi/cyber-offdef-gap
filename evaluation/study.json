@@ -1,0 +1,12 @@
+{
+  "schema": "shared-cyber-evals/study-v1",
+  "study": "offdef",
+  "models": [
+    {"label": "benign", "source": "openai/gpt-oss-120b", "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a"},
+    {"label": "abliterated", "source": "wangzhang/gpt-oss-120b-abliterated", "revision": "3358d330ba77c3adb23ccaa0448f01ef18be5c54"}
+  ],
+  "benchmarks": ["cybergym", "exploitgym", "excytin"],
+  "auditbench_selector": {"kind": "full"},
+  "sampling": {"temperature": 0.7, "top_p": 1.0, "max_tokens": 8192, "context_tokens": 32768, "reasoning_effort": "high", "repetitions": 1, "base_seed": 1234},
+  "comparison_notes": ["The released benign checkpoint uses MXFP4 weights and the released abliterated checkpoint uses BF16 weights. This is a quantization confound, not a controlled ablation at identical weight precision.", "Native formats are preserved; no implicit re-quantization, context reduction, model replacement, or benchmark subsampling."]
+}
